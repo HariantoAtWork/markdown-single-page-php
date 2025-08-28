@@ -41,7 +41,7 @@ $content = markdownToHtml($markdown);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($pageTitle); ?></title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
@@ -72,7 +72,7 @@ $content = markdownToHtml($markdown);
         </main>
     </div>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>
 
