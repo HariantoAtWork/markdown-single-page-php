@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2025-08-28T15:28:39+0200
+
+### Added
+- Comprehensive README.md with installation instructions for Apache and Nginx
+- Detailed troubleshooting guide
+- Security considerations documentation
+- Development guidelines
+
+### Fixed
+- CSS styling for images to prevent overflow issues
+- Added proper responsive image handling
+
 ## [1.1.0] - 2025-08-28T15:12:35+0200
 
 ### Changed
