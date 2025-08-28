@@ -1,4 +1,4 @@
-§# Welcome to My Markdown Page
+# Welcome to My Markdown Page
 
 This is a simple markdown file that gets converted to HTML by PHP.
 
@@ -32,7 +32,7 @@ Visit [GitHub](https://github.com) for more information.
 
 ### Images
 
-![Example Image](https://via.placeholder.com/300x200)
+![Meow](https://cataas.com/cat)
 
 ---
 

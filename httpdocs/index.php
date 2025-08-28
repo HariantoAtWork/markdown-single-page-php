@@ -1,46 +1,14 @@
 <?php
-// Simple Markdown to HTML Converter
+// Require Composer autoloader
+require_once __DIR__ . '/vendor/autoload.php';
+
+// Use Parsedown for markdown parsing
+use Parsedown;
+
 function markdownToHtml($markdown) {
-    // Basic markdown parsing
-    $html = $markdown;
-    
-    // Headers
-    $html = preg_replace('/^### (.*$)/m', '<h3>$1</h3>', $html);
-    $html = preg_replace('/^## (.*$)/m', '<h2>$1</h2>', $html);
-    $html = preg_replace('/^# (.*$)/m', '<h1>$1</h1>', $html);
-    
-    // Bold
-    $html = preg_replace('/\*\*(.*?)\*\*/', '<strong>$1</strong>', $html);
-    
-    // Italic
-    $html = preg_replace('/\*(.*?)\*/', '<em>$1</em>', $html);
-    
-    // Links
-    $html = preg_replace('/\[([^\]]+)\]\(([^)]+)\)/', '<a href="$2">$1</a>', $html);
-    
-    // Images
-    $html = preg_replace('/!\[([^\]]*)\]\(([^)]+)\)/', '<img src="$2" alt="$1" style="max-width: 100%; height: auto;">', $html);
-    
-    // Code blocks
-    $html = preg_replace('/```(\w+)?\n(.*?)\n```/s', '<pre><code class="$1">$2</code></pre>', $html);
-    
-    // Inline code
-    $html = preg_replace('/`([^`]+)`/', '<code>$1</code>', $html);
-    
-    // Lists
-    $html = preg_replace('/^- (.*$)/m', '<li>$1</li>', $html);
-    $html = preg_replace('/(<li>.*<\/li>)/s', '<ul>$1</ul>', $html);
-    
-    // Horizontal rule
-    $html = preg_replace('/^---$/m', '<hr>', $html);
-    
-    // Paragraphs
-    $html = preg_replace('/\n\n([^<].*)/', '<p>$1</p>', $html);
-    
-    // Clean up multiple newlines
-    $html = preg_replace('/\n\n+/', "\n\n", $html);
-    
-    return $html;
+    $parsedown = new Parsedown();
+    $parsedown->setSafeMode(true); // Enable safe mode for security
+    return $parsedown->text($markdown);
 }
 
 // Read the markdown file
@@ -53,6 +21,17 @@ if (file_exists($markdownFile)) {
     $markdown = '# Error: index.md not found';
 }
 
+// Extract page title from first line
+$lines = explode("\n", $markdown);
+$pageTitle = 'Markdown to HTML Converter'; // Default title
+
+if (!empty($lines[0])) {
+    $firstLine = trim($lines[0]);
+    if (preg_match('/^# (.+)$/', $firstLine, $matches)) {
+        $pageTitle = $matches[1];
+    }
+}
+
 // Convert markdown to HTML
 $content = markdownToHtml($markdown);
 ?>
@@ -61,7 +40,7 @@ $content = markdownToHtml($markdown);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markdown to HTML Converter</title>
+    <title><?php echo htmlspecialchars($pageTitle); ?></title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -133,8 +112,12 @@ $content = markdownToHtml($markdown);
         }
         
         img {
+            max-width: 100%;
+            height: auto;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: block;
+            margin: 20px 0;
         }
         
         hr {
