@@ -41,100 +41,38 @@ $content = markdownToHtml($markdown);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($pageTitle); ?></title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f8f9fa;
-        }
-        
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        h1 {
-            color: #2c3e50;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 10px;
-        }
-        
-        h2 {
-            color: #34495e;
-            margin-top: 30px;
-        }
-        
-        h3 {
-            color: #7f8c8d;
-        }
-        
-        a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        
-        a:hover {
-            text-decoration: underline;
-        }
-        
-        code {
-            background-color: #f4f4f4;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-        }
-        
-        pre {
-            background-color: #f8f8f8;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-            border-left: 4px solid #3498db;
-        }
-        
-        pre code {
-            background: none;
-            padding: 0;
-        }
-        
-        ul {
-            padding-left: 20px;
-        }
-        
-        li {
-            margin-bottom: 5px;
-        }
-        
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: block;
-            margin: 20px 0;
-        }
-        
-        hr {
-            border: none;
-            border-top: 2px solid #ecf0f1;
-            margin: 30px 0;
-        }
-        
-        p {
-            margin-bottom: 15px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
-    <div class="container">
-        <?php echo $content; ?>
+    <div id="app">
+        <button class="mobile-toggle" @click="toggleSidebar">
+            {{ sidebarOpen ? '✕' : '☰' }} Menu
+        </button>
+        
+        <aside class="sidebar" :class="{ open: sidebarOpen }">
+            <div class="sidebar-title">On this page</div>
+            <ul class="sidebar-nav">
+                <li v-for="header in headers" :key="header.id">
+                    <a 
+                        :href="'#' + header.id" 
+                        :class="['h' + header.level, { active: activeHeader === header.id }]"
+                        @click="scrollToHeader(header.id)"
+                    >
+                        {{ header.text }}
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        
+        <main class="main-content">
+            <div class="container">
+                <?php echo $content; ?>
+            </div>
+        </main>
     </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
 
